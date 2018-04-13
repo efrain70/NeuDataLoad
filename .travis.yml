@@ -6,12 +6,8 @@ python:
   - '3.5'
   - '3.6'
 env:
-  - TOXENV=todo
-  - TOXENV=flake8
-  - TOXENV=code_complexity
   - TOXENV=packages
   - TOXENV=coverage
-  - TOXENV=unittest
 
 install:
   - pip install --upgrade --pre tox
@@ -24,15 +20,22 @@ notifications:
 
 jobs:
   include:
+    - stage: syntax
+      env: TOXENV:todo
+    - stage: syntax
+      env: TOXENV:flake8
+    - stage: syntax
+      env: TOXENV:code_complexity
+
     - stage: test
-      env: TEXTENV=unittest
+      env: TOXENV=unittest
       python: 3.5
 
     - stage: test
-      env: TEXTENV=unittest
+      env: TOXENV=unittest
       python: 3.6
 
     - stage: coveralls
       script: tox --recreate
       python: 3.6
-      env: TEXTENV=coveralls
+      env: TOXENV=coveralls
