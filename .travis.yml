@@ -4,26 +4,11 @@ python:
   - '3.4'
   - '3.5'
   - '3.6'
-# command to install dependencies
+
 install:
   - pip install --upgrade --pre tox
-# # command to run tests
-env:
-  matrix:
-    # coveralls is not listed in tox's envlist, but should run in travisç
-    - python: 3.6
-      TOXENV=coveralls
 
-    - python: 3.4
-      TOXENV=py34
-
-    - python: 3.5
-      TOXENV=py35
-
-    - python: 3.6
-      TOXENV=py36
-
-script: tox --recreate
+script: tox
 
 notifications:
   email:
