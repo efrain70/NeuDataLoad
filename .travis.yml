@@ -1,13 +1,15 @@
 sudo: false
 language: python
 python:
-  - '2.7'
-  - '3.4'
-  - '3.5'
   - '3.6'
+  - '3.5'
+  - '3.4'
+  - '2.7'
+
 env:
   - TOXENV=packages
   - TOXENV=coverage
+  - TOXENV=unittest
 
 install:
   - pip install --upgrade --pre tox
@@ -18,24 +20,22 @@ notifications:
   email:
     - efrain70@gmail.com
 
+stages:
+  - syntax
+  - test
+  - coveralls
+
 jobs:
   include:
     - stage: syntax
       env: TOXENV:todo
+
     - stage: syntax
       env: TOXENV:flake8
+
     - stage: syntax
       env: TOXENV:code_complexity
 
-    - stage: test
-      env: TOXENV=unittest
-      python: 3.5
-
-    - stage: test
-      env: TOXENV=unittest
-      python: 3.6
-
     - stage: coveralls
-      script: tox --recreate
       python: 3.6
       env: TOXENV=coveralls
