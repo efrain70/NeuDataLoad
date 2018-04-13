@@ -8,7 +8,7 @@ python:
 install:
   - pip install --upgrade --pre tox
 
-script: tox
+script: tox --recreate
 
 notifications:
   email:
