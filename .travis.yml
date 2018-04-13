@@ -28,13 +28,16 @@ stages:
 jobs:
   include:
     - stage: syntax
-      env: TOXENV:todo
+      env: TOXENV=todo
+      python: 3.6
 
     - stage: syntax
-      env: TOXENV:flake8
+      env: TOXENV=flake8
+      python: 3.6
 
     - stage: syntax
-      env: TOXENV:code_complexity
+      env: TOXENV=code_complexity
+      python: 3.6
 
     - stage: coveralls
       python: 3.6
