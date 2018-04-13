@@ -32,7 +32,6 @@ jobs:
       env: TEXTENV=unittest
       python: 3.6
 
-
     - stage: coveralls
       script: tox --recreate
       python: 3.6
