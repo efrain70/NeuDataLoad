@@ -21,3 +21,10 @@ script: tox --recreate
 notifications:
   email:
     - efrain70@gmail.com
+
+jobs:
+  include:
+    - stage: coveralls
+      script: tox --recreate
+      python: 3.6
+      env: TEXTENV=coveralls
