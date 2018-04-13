@@ -1,12 +1,17 @@
 sudo: false
 language: python
 python:
+  - '2.7'
   - '3.4'
   - '3.5'
   - '3.6'
 env:
   - TOXENV=todo
   - TOXENV=flake8
+  - TOXENV=code_complexity
+  - TOXENV=packages
+  - TOXENV=coverage
+  - TOXENV=unittest
 
 install:
   - pip install --upgrade --pre tox
