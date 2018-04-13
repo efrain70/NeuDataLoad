@@ -24,6 +24,15 @@ notifications:
 
 jobs:
   include:
+    - stage: test
+      env: TEXTENV=unittest
+      python: 3.5
+
+    - stage: test
+      env: TEXTENV=unittest
+      python: 3.6
+
+
     - stage: coveralls
       script: tox --recreate
       python: 3.6
