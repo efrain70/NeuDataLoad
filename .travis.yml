@@ -10,12 +10,18 @@ install:
 # # command to run tests
 env:
   matrix:
-    # coveralls is not listed in tox's envlist, but should run in travis
-    - TOXENV=coveralls
-    # note: please use "tox --listenvs" to populate the build matrix below
-    - TOXENV=py34
-    - TOXENV=py35
-    - TOXENV=py36
+    # coveralls is not listed in tox's envlist, but should run in travisç
+    - python: 3.6
+      TOXENV=coveralls
+
+    - python: 3.4
+      TOXENV=py34
+
+    - python: 3.5
+      TOXENV=py35
+
+    - python: 3.6
+      TOXENV=py36
 
 script: tox --recreate
 
