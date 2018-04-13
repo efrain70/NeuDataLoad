@@ -4,6 +4,9 @@ python:
   - '3.4'
   - '3.5'
   - '3.6'
+env:
+  - TOXENV=todo
+  - TOXENV=flake8
 
 install:
   - pip install --upgrade --pre tox
