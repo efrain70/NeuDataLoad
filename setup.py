@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 """setup script for building, distributing and installing."""
 
 from setuptools import setup, find_packages
