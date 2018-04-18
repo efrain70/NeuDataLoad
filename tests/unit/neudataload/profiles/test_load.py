@@ -1,10 +1,11 @@
+import os
+import logging
+
 import pytest
 import pandas
 import six
 
 from neudataload.profiles import NeuProfiles
-
-import os
 
 
 FIXTURE_DIR = os.path.join(
@@ -16,10 +17,10 @@ FIXTURE_DIR = os.path.join(
     )
 
 
+@pytest.mark.datafiles(FIXTURE_DIR)
 class TestLoad(object):
 
-    @pytest.mark.datafiles(FIXTURE_DIR)
-    def test_load(self, datafiles):
+    def test_valid(self, datafiles):
         path = os.path.join(str(datafiles), 'valid')
         filename = 'profiles.xlsx'
 
@@ -37,8 +38,7 @@ class TestLoad(object):
         for column_name in ['RAW', 'LS', 'DTI_L1', 'DTI_MD', 'DTI_RX', 'DTI_FA', 'FUNC']:
             assert column_name in profiles.data_frame.columns
 
-    @pytest.mark.datafiles(FIXTURE_DIR)
-    def test_load_fail_duplicates_id(self, datafiles):
+    def test_fail_duplicates_id(self, datafiles):
         path = os.path.join(str(datafiles), 'duplicated_id')
         filename = 'profiles.xlsx'
         profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
@@ -51,28 +51,55 @@ class TestLoad(object):
         else:
             assert str(error.value) == "Index has duplicate keys: ['FIS_007', 'TTO_06']"
 
-    @pytest.mark.datafiles(FIXTURE_DIR)
-    def test_load_fail_duplicates_data(self, datafiles):
+    def test_fail_duplicates_data(self, datafiles):
         path = os.path.join(str(datafiles), 'duplicated_data')
         filename = 'profiles.xlsx'
         profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
 
-        # TODO change exception
-        with pytest.raises(Exception) as error:
+        with pytest.raises(ValueError) as error:
             profiles.load()
 
         assert str(error.value) == "Already existing value at [FIS_007, DTI_FA]: " \
                                    "Value from FIS_007_FA_factor.csv cannot be loaded."
 
-    @pytest.mark.datafiles(FIXTURE_DIR)
-    def test_load_fail_format(self, datafiles):
+    def test_fail_format(self, datafiles):
         path = os.path.join(str(datafiles), 'duplicated_data')
         filename = 'profiles.xlsx'
         profiles = NeuProfiles(profiles_path=path, profiles_filename=filename, format_file='mat')
 
-        # TODO change exception
         with pytest.raises(NotImplementedError) as error:
             profiles.load()
 
-        # TODO add comment
-        assert str(error.value) == ""
+        assert str(error.value) == 'Format \'mat\' not supported'
+
+    def test_format_info(self, datafiles, caplog):
+        caplog.set_level(logging.INFO)
+
+        path = os.path.join(str(datafiles), 'valid')
+        filename = 'profiles.xlsx'
+
+        profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
+
+        assert profiles.data_frame is None
+
+        profiles.load()
+
+        assert len(caplog.records) == 25
+
+        for record in caplog.records:
+            assert record.levelname == 'INFO'
+            assert 'Reading content in ' in record.message
+            assert path in record.message
+            assert 'directory with ' in record.message
+
+    def test_debug(self, datafiles, caplog):
+        caplog.set_level(logging.INFO)
+        path = os.path.join(str(datafiles), 'index_not_found')
+        filename = 'profiles.xlsx'
+        profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
+        profiles.load()
+        assert len(caplog.records) == 4
+
+        assert caplog.records[2].levelname == 'WARNING'
+        assert caplog.records[2].message == "Index (id) FIS_007 couldn't be found, skipped " \
+                                            "(file FIS_007_FA_factor.csv)"
