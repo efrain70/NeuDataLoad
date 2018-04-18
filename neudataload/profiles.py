@@ -81,7 +81,7 @@ class NeuProfiles(object):
 
             for path, _, files in os.walk(self.profile_path):
                 # TODO logger
-                print(path)
+                # print(path)
 
                 try:
                     end_name, column_name = self.directories[path]
@@ -105,7 +105,6 @@ class NeuProfiles(object):
     def _save_to_dataframe(self, file_name, matrix, postfix, column_name):
         index = file_name.replace(postfix, '')
 
-        import ipdb; ipdb.set_trace()
         if index in self.data_frame.index:
             try:
                 current_value = self.data_frame.at[index, column_name]
