@@ -89,12 +89,8 @@ class TestLoad(object):
         for record in caplog.records:
             assert record.levelname == 'INFO'
             assert 'Reading content in ' in record.message
+            assert path in record.message
             assert 'directory with ' in record.message
-
-        assert 'Reading content in ' \
-               '"{}/' \
-               'PREDICTORS/ADJACENCY_MATRICES_GRAPH/DTI_' \
-               'indices/FA" directory with 20 files'.format(path) in caplog.records[4].message
 
     def test_debug(self, datafiles, caplog):
         caplog.set_level(logging.INFO)
