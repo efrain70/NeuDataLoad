@@ -100,15 +100,16 @@ class NeuProfiles(object):
 
         else:
             # TODO comment
-            raise NotImplemented
+            raise NotImplementedError()
 
     def _save_to_dataframe(self, file_name, matrix, postfix, column_name):
         index = file_name.replace(postfix, '')
 
+        import ipdb; ipdb.set_trace()
         if index in self.data_frame.index:
             try:
                 current_value = self.data_frame.at[index, column_name]
-                if pandas.isna(current_value) or not current_value:
+                if pandas.isnull(current_value) is True:
                     raise KeyError
 
             except KeyError:
@@ -116,8 +117,8 @@ class NeuProfiles(object):
             else:
                 # TODO Change exception
                 raise Exception(
-                    'Duplicated key-column value {} {} from {}: current {}'.format(
-                        index, column_name, file_name, str(current_value)))
+                    'Already existing value at [{}, {}]: Value from {} cannot be loaded.'.format(
+                        index, column_name, file_name))
         else:
             # TODO logger
             pass
