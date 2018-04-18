@@ -6,8 +6,6 @@ python:
   - '2.7'
 
 env:
-  - TOXENV=packages
-  - TOXENV=coverage
   - TOXENV=unittest
 
 install:
@@ -20,24 +18,37 @@ notifications:
     - efrain70@gmail.com
 
 stages:
-  - syntax
+  - metrics
+  - build
   - test
-  - coveralls
+  - coverage
 
 jobs:
   include:
-    - stage: syntax
-      env: TOXENV=todo
+    - stage: metrics
+      env: TOXENV=style_guide
       python: 3.6
 
-    - stage: syntax
+    - stage: metrics
       env: TOXENV=flake8
       python: 3.6
 
-    - stage: syntax
+    - stage: metrics
       env: TOXENV=code_complexity
       python: 3.6
 
-    - stage: coveralls
+    - stage: metrics
+      env: TOXENV=todo
+      python: 3.6
+
+    - stage: build
+      env: TOXENV=packages
+      python: 3.6
+
+    - stage: coverage
+      python: 3.6
+      env: TOXENV=coverage
+
+    - stage: coverage
       python: 3.6
       env: TOXENV=coveralls
