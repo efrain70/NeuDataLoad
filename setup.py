@@ -23,6 +23,9 @@ setup(
         'setuptools_scm',
     ],
     install_requires=[
+        'pandas',
+        'xlrd',
+        'six',
     ],
     license='CC BY-NC-SA 4.0',
     zip_safe=False,
