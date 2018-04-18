@@ -1,3 +1,4 @@
+import logging
 import os
 
 import numpy as np
@@ -72,7 +73,6 @@ class NeuProfiles(object):
         return d_updated
 
     def load(self):
-
         if self.format_file == 'xls':
             path = os.path.join(self.profile_path, self.profiles_filename)
 
@@ -80,27 +80,27 @@ class NeuProfiles(object):
             self.data_frame.set_index('ID', verify_integrity=True, inplace=True)
 
             for path, _, files in os.walk(self.profile_path):
-                # TODO logger
-                # print(path)
 
-                try:
-                    end_name, column_name = self.directories[path]
-                except KeyError:
-                    continue
-                else:
-                    if column_name not in self.data_frame.columns:
-                        self.data_frame[column_name] = np.nan
-                        self.data_frame[column_name] = self.data_frame[column_name].astype(np.ndarray)
+                if files:
+                    logging.info('Reading content in "{}" directory with {} files'.format(path, len(files)))
 
-                    matrix_values = {f: np.loadtxt(os.path.join(path, f), delimiter=",", skiprows=0)
-                                     for f in filter(lambda x: x.endswith(end_name), files)}
+                    try:
+                        end_name, column_name = self.directories[path]
+                    except KeyError:
+                        continue
+                    else:
+                        if column_name not in self.data_frame.columns:
+                            self.data_frame[column_name] = np.nan
+                            self.data_frame[column_name] = self.data_frame[column_name].astype(np.ndarray)
 
-                    for file_name, matrix in matrix_values.items():
-                        self._save_to_dataframe(file_name, matrix, end_name, column_name)
+                        matrix_values = {f: np.loadtxt(os.path.join(path, f), delimiter=",", skiprows=0)
+                                         for f in filter(lambda x: x.endswith(end_name), files)}
+
+                        for file_name, matrix in matrix_values.items():
+                            self._save_to_dataframe(file_name, matrix, end_name, column_name)
 
         else:
-            # TODO comment
-            raise NotImplementedError()
+            raise NotImplementedError('Format \'{}\' not supported'.format(self.format_file))
 
     def _save_to_dataframe(self, file_name, matrix, postfix, column_name):
         index = file_name.replace(postfix, '')
@@ -114,10 +114,8 @@ class NeuProfiles(object):
             except KeyError:
                 self.data_frame.at[index, column_name] = matrix
             else:
-                # TODO Change exception
-                raise Exception(
+                raise ValueError(
                     'Already existing value at [{}, {}]: Value from {} cannot be loaded.'.format(
                         index, column_name, file_name))
         else:
-            # TODO logger
-            pass
+            logging.warning('Index (id) {} couldn\'t be found, skipped (file {})'.format(index, file_name))
