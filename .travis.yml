@@ -26,9 +26,9 @@ stages:
 
 jobs:
   include:
-    # - stage: syntax
-    #  env: TOXENV=todo
-    #  python: 3.6
+    - stage: syntax
+      env: TOXENV=todo
+      python: 3.6
 
     - stage: syntax
       env: TOXENV=flake8
