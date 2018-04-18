@@ -2,30 +2,42 @@ sudo: false
 language: python
 python:
   - '3.6'
-# command to install dependencies
+  - '3.5'
+  - '2.7'
+
+env:
+  - TOXENV=packages
+  - TOXENV=coverage
+  - TOXENV=unittest
+
 install:
   - pip install --upgrade --pre tox
-# # command to run tests
-env:
-  matrix:
-    # coveralls is not listed in tox's envlist, but should run in travis
-    - TOXENV=coveralls
-    # note: please use "tox --listenvs" to populate the build matrix below
-    - TOXENV=py34
-    - TOXENV=py35
-    - TOXENV=py36
-
-matrix:
-  include:
-    - env: TOXENV=py34
-      python: '3.4'
-    - env: TOXENV=py35
-      python: '3.5'
-    - env: TOXENV=py36
-      python: '3.6'
 
 script: tox --recreate
 
 notifications:
   email:
     - efrain70@gmail.com
+
+stages:
+  - syntax
+  - test
+  - coveralls
+
+jobs:
+  include:
+    # - stage: syntax
+    #  env: TOXENV=todo
+    #  python: 3.6
+
+    - stage: syntax
+      env: TOXENV=flake8
+      python: 3.6
+
+    - stage: syntax
+      env: TOXENV=code_complexity
+      python: 3.6
+
+    - stage: coveralls
+      python: 3.6
+      env: TOXENV=coveralls
