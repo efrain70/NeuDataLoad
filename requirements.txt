@@ -1,6 +1,7 @@
 # library requirements
 pandas
 xlrd
+six
 
 # build requirements
 wheel>=0.30.0a0
