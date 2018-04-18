@@ -1,6 +1,6 @@
 import pytest
 import pandas
-
+import six
 
 from neudataload.profiles import NeuProfiles
 
@@ -45,5 +45,8 @@ class TestLoad(object):
 
         with pytest.raises(ValueError) as error:
             profiles.load()
-        assert str(error.value) == "Index has duplicate keys: [u'FIS_007', u'TTO_06']"
 
+        if six.PY2:
+            assert str(error.value) == "Index has duplicate keys: [u'FIS_007', u'TTO_06']"
+        else:
+            assert str(error.value) == "Index has duplicate keys: ['FIS_007', 'TTO_06']"
