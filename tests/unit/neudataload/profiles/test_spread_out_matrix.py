@@ -32,7 +32,8 @@ class TestExtedMatrix(object):
         assert isinstance(profiles.data_frame, pandas.DataFrame)
         assert profiles.data_frame.shape == (1, 2)
         assert profiles.data_frame.index.name == 'ID'
-        assert list(profiles.data_frame.columns) == ['DTI_L1', 'DTI_FA']
+        assert sorted(
+            list(profiles.data_frame.columns)) == ['DTI_FA', 'DTI_L1']
 
         assert profiles.data_frame.DTI_FA.FIS_007[0][0] == 1
         assert profiles.data_frame.DTI_FA.FIS_007[2][2] == 9
