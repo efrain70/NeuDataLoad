@@ -167,6 +167,7 @@ class NeuProfiles(object):
                 'Format \'{}\' not supported'.format(self.format_file))
 
     def _save_to_dataframe(self, file_name, matrix, postfix, column_name):
+
         index = file_name.replace(postfix, '')
 
         if index in self.data_frame.index:
@@ -185,8 +186,19 @@ class NeuProfiles(object):
             logging.warning('Index (id) {} couldn\'t be found, '
                             'skipped (file {})'.format(index, file_name))
 
-    def extend_matrix(self, *columns, keep_matrix=False):
+    def spread_out_matrix(self, *columns, keep_matrix=False):
+        """Spread out the values of matrix saved in columns.
 
+        Args:
+            *columns: columns with the matrix to be spread out
+            keep_matrix: if True the original column with the matrix wont be
+            removed.
+
+        Returns:
+            A dataframe with a new column for each coordenate of the matrix and
+            for each matrix.
+
+        """
         df = self.data_frame
 
         new_dfs = list()
