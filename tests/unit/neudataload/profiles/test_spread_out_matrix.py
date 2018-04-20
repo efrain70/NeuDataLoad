@@ -55,7 +55,7 @@ class TestExtedMatrix(object):
             'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
             'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
             'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
-        ] == list(new_dataframe.columns)
+        ] == sorted(list(new_dataframe.columns))
 
         assert new_dataframe.DTI_L1_0_0[0] == 11
         assert new_dataframe.DTI_L1_0_1[0] == 12
@@ -80,13 +80,13 @@ class TestExtedMatrix(object):
                                                    keep_matrix=False)
 
         assert [
-            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
-            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
-            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
             'DTI_FA_0_0', 'DTI_FA_0_1', 'DTI_FA_0_2',
             'DTI_FA_1_0', 'DTI_FA_1_1', 'DTI_FA_1_2',
             'DTI_FA_2_0', 'DTI_FA_2_1', 'DTI_FA_2_2',
-        ] == list(new_dataframe.columns)
+            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
+            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
+            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
+        ] == sorted(list(new_dataframe.columns))
 
         assert new_dataframe.DTI_L1_0_0[0] == 11
         assert new_dataframe.DTI_L1_0_1[0] == 12
@@ -123,14 +123,15 @@ class TestExtedMatrix(object):
                                                    keep_matrix=True)
 
         assert [
-            'DTI_L1', 'DTI_FA',
-            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
-            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
-            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
+            'DTI_FA',
             'DTI_FA_0_0', 'DTI_FA_0_1', 'DTI_FA_0_2',
             'DTI_FA_1_0', 'DTI_FA_1_1', 'DTI_FA_1_2',
             'DTI_FA_2_0', 'DTI_FA_2_1', 'DTI_FA_2_2',
-        ] == list(new_dataframe.columns)
+            'DTI_L1',
+            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
+            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
+            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
+        ] == sorted(list(new_dataframe.columns))
 
         assert new_dataframe.DTI_L1_0_0[0] == 11
         assert new_dataframe.DTI_L1_0_1[0] == 12
