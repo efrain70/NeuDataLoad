@@ -48,7 +48,7 @@ class TestExtedMatrix(object):
         profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
         profiles.load()
 
-        new_dataframe = profiles.spread_out_matrix('DTI_L1', keep_matrix=False)
+        new_dataframe = profiles.spread_out_matrix(['DTI_L1'], keep_matrix=False)
 
         assert [
             'DTI_FA',
@@ -76,7 +76,7 @@ class TestExtedMatrix(object):
         profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
         profiles.load()
 
-        new_dataframe = profiles.spread_out_matrix('DTI_L1', 'DTI_FA',
+        new_dataframe = profiles.spread_out_matrix(['DTI_L1', 'DTI_FA'],
                                                    keep_matrix=False)
 
         assert [
@@ -119,7 +119,7 @@ class TestExtedMatrix(object):
         profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
         profiles.load()
 
-        new_dataframe = profiles.spread_out_matrix('DTI_L1', 'DTI_FA',
+        new_dataframe = profiles.spread_out_matrix(['DTI_L1', 'DTI_FA',],
                                                    keep_matrix=True)
 
         assert [
