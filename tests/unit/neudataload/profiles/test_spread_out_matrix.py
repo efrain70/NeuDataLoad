@@ -18,7 +18,7 @@ FIXTURE_DIR = os.path.join(
 @pytest.mark.datafiles(FIXTURE_DIR)
 class TestExtedMatrix(object):
 
-    def test_valid(self, datafiles):
+    def test_small(self, datafiles):
         path = os.path.join(str(datafiles), 'small_data')
         filename = 'profiles.xlsx'
 
@@ -40,19 +40,20 @@ class TestExtedMatrix(object):
         assert profiles.data_frame.DTI_L1.FIS_007[0][0] == 11
         assert profiles.data_frame.DTI_L1.FIS_007[2][2] == 19
 
-    def test_extract_simple(self, datafiles):
+    def test_spread_out_simple(self, datafiles):
         path = os.path.join(str(datafiles), 'small_data')
         filename = 'profiles.xlsx'
 
         profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
         profiles.load()
 
-        new_dataframe = profiles.extend_matrix('DTI_L1', keep_matrix=False)
+        new_dataframe = profiles.spread_out_matrix('DTI_L1', keep_matrix=False)
 
-        assert ['DTI_FA',
-                'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
-                'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
-                'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
+        assert [
+            'DTI_FA',
+            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
+            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
+            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
         ] == list(new_dataframe.columns)
 
         assert new_dataframe.DTI_L1_0_0[0] == 11
@@ -67,23 +68,23 @@ class TestExtedMatrix(object):
         assert new_dataframe.DTI_L1_2_1[0] == 18
         assert new_dataframe.DTI_L1_2_2[0] == 19
 
-    def test_extract_multiple(self, datafiles):
+    def test_spread_out_multiple(self, datafiles):
         path = os.path.join(str(datafiles), 'small_data')
         filename = 'profiles.xlsx'
 
         profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
         profiles.load()
 
-        new_dataframe = profiles.extend_matrix('DTI_L1', 'DTI_FA',
-                                               keep_matrix=False)
+        new_dataframe = profiles.spread_out_matrix('DTI_L1', 'DTI_FA',
+                                                   keep_matrix=False)
 
         assert [
-               'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
-               'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
-               'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
-               'DTI_FA_0_0', 'DTI_FA_0_1', 'DTI_FA_0_2',
-               'DTI_FA_1_0', 'DTI_FA_1_1', 'DTI_FA_1_2',
-               'DTI_FA_2_0', 'DTI_FA_2_1', 'DTI_FA_2_2',
+            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
+            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
+            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
+            'DTI_FA_0_0', 'DTI_FA_0_1', 'DTI_FA_0_2',
+            'DTI_FA_1_0', 'DTI_FA_1_1', 'DTI_FA_1_2',
+            'DTI_FA_2_0', 'DTI_FA_2_1', 'DTI_FA_2_2',
         ] == list(new_dataframe.columns)
 
         assert new_dataframe.DTI_L1_0_0[0] == 11
@@ -117,16 +118,17 @@ class TestExtedMatrix(object):
         profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
         profiles.load()
 
-        new_dataframe = profiles.extend_matrix('DTI_L1', 'DTI_FA',
-                                               keep_matrix=True)
+        new_dataframe = profiles.spread_out_matrix('DTI_L1', 'DTI_FA',
+                                                   keep_matrix=True)
 
-        assert ['DTI_L1', 'DTI_FA',
-                'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
-                'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
-                'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
-                'DTI_FA_0_0', 'DTI_FA_0_1', 'DTI_FA_0_2',
-                'DTI_FA_1_0', 'DTI_FA_1_1', 'DTI_FA_1_2',
-                'DTI_FA_2_0', 'DTI_FA_2_1', 'DTI_FA_2_2',
+        assert [
+            'DTI_L1', 'DTI_FA',
+            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
+            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
+            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
+            'DTI_FA_0_0', 'DTI_FA_0_1', 'DTI_FA_0_2',
+            'DTI_FA_1_0', 'DTI_FA_1_1', 'DTI_FA_1_2',
+            'DTI_FA_2_0', 'DTI_FA_2_1', 'DTI_FA_2_2',
         ] == list(new_dataframe.columns)
 
         assert new_dataframe.DTI_L1_0_0[0] == 11
