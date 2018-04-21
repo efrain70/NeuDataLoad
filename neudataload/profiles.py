@@ -96,6 +96,7 @@ class NeuProfiles(object):
 
         """
         self.data_frame = None
+        self._matrix_column = list()
 
         self.profile_path = profiles_path
         self.profiles_filename = profiles_filename
@@ -149,6 +150,7 @@ class NeuProfiles(object):
                             self.data_frame[column_name] = np.nan
                             self.data_frame[column_name] = \
                                 self.data_frame[column_name].astype(np.ndarray)
+                            self._matrix_column.append(column_name)
 
                         matrix_values = {
                             f: np.loadtxt(os.path.join(path, f),
@@ -165,6 +167,7 @@ class NeuProfiles(object):
                 'Format \'{}\' not supported'.format(self.format_file))
 
     def _save_to_dataframe(self, file_name, matrix, postfix, column_name):
+
         index = file_name.replace(postfix, '')
 
         if index in self.data_frame.index:
@@ -182,3 +185,41 @@ class NeuProfiles(object):
         else:
             logging.warning('Index (id) {} couldn\'t be found, '
                             'skipped (file {})'.format(index, file_name))
+
+    def spread_out_matrix(self, columns, keep_matrix=False):
+        """Spread out the values of matrix saved in columns.
+
+        Args:
+            *columns: columns with the matrix to be spread out
+            keep_matrix: if True the original column with the matrix wont be
+            removed.
+
+        Returns:
+            A dataframe with a new column for each coordenate of the matrix and
+            for each matrix.
+
+        """
+        df = self.data_frame
+
+        new_dfs = list()
+
+        for column in columns:
+            reshaped = df[df[column].notnull()][column].apply(
+                lambda x: x.reshape(-1))
+
+            max_dim = int(np.sqrt(reshaped.apply(len).max()))
+
+            values = reshaped.values.tolist()
+            new_columns = ['{}_{}_{}'.format(column, str(x), str(y))
+                           for x in list(range(0, max_dim))
+                           for y in list(range(0, max_dim))]
+
+            df_reshaped = pandas.DataFrame(
+                values, columns=new_columns, index=reshaped.index)
+
+            new_dfs.append(df_reshaped)
+
+        if not keep_matrix:
+            df = df.drop(columns=list(columns))
+
+        return pandas.concat([df, ] + new_dfs, axis=1)
