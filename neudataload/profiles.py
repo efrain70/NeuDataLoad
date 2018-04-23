@@ -154,7 +154,7 @@ class NeuProfiles(object):
 
                         matrix_values = {
                             f: np.loadtxt(os.path.join(path, f),
-                                          delimiter=",", skiprows=0)
+                                          delimiter=",", skiprows=0, ndmin=2)
                             for f in filter(
                                 lambda x: x.endswith(end_name), files)}
 
@@ -186,7 +186,7 @@ class NeuProfiles(object):
             logging.warning('Index (id) {} couldn\'t be found, '
                             'skipped (file {})'.format(index, file_name))
 
-    def spread_out_matrix(self, columns, keep_matrix=False):
+    def spread_out_matrix(self, columns, keep_matrix=False, inplace=True):
         """Spread out the values of matrix saved in columns.
 
         Args:
@@ -222,4 +222,9 @@ class NeuProfiles(object):
         if not keep_matrix:
             df = df.drop(columns=list(columns))
 
-        return pandas.concat([df, ] + new_dfs, axis=1)
+        df = pandas.concat([df, ] + new_dfs, axis=1)
+
+        if inplace:
+            self.data_frame = df
+
+        return df
