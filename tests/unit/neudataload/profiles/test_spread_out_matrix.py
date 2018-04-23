@@ -48,7 +48,8 @@ class TestExtedMatrix(object):
         profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
         profiles.load()
 
-        new_dataframe = profiles.spread_out_matrix(['DTI_L1'], keep_matrix=False)
+        new_dataframe = profiles.spread_out_matrix(
+            ['DTI_L1'], keep_matrix=False)
 
         assert [
             'DTI_FA',
@@ -162,3 +163,57 @@ class TestExtedMatrix(object):
 
         assert profiles.data_frame.DTI_L1.FIS_007[0][0] == 11
         assert profiles.data_frame.DTI_L1.FIS_007[2][2] == 19
+
+    def test_inplace_false(self, datafiles):
+        path = os.path.join(str(datafiles), 'small_data')
+        filename = 'profiles.xlsx'
+
+        profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
+        profiles.load()
+
+        old_dataframe = profiles.data_frame
+
+        new_dataframe = profiles.spread_out_matrix(
+            ['DTI_L1'], keep_matrix=False, inplace=False)
+
+        assert [
+            'DTI_FA',
+            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
+            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
+            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
+        ] == sorted(list(new_dataframe.columns))
+
+        for new_column in  [
+            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
+            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
+            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
+        ]:
+            assert new_column not in profiles.data_frame.columns
+
+        assert (old_dataframe == profiles.data_frame).all().all()
+
+    def test_inplace_false(self, datafiles):
+        path = os.path.join(str(datafiles), 'small_data')
+        filename = 'profiles.xlsx'
+
+        profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
+        profiles.load()
+
+        new_dataframe = profiles.spread_out_matrix(
+            ['DTI_L1'], keep_matrix=False, inplace=True)
+
+        assert [
+            'DTI_FA',
+            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
+            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
+            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
+        ] == sorted(list(new_dataframe.columns))
+
+        for new_column in [
+            'DTI_L1_0_0', 'DTI_L1_0_1', 'DTI_L1_0_2',
+            'DTI_L1_1_0', 'DTI_L1_1_1', 'DTI_L1_1_2',
+            'DTI_L1_2_0', 'DTI_L1_2_1', 'DTI_L1_2_2',
+        ]:
+            assert new_column in profiles.data_frame.columns
+
+        assert (new_dataframe == profiles.data_frame).all().all()
