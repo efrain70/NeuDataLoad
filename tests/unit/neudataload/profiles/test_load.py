@@ -35,8 +35,11 @@ class TestLoad(object):
         assert profiles.data_frame.shape == (63, 7)
         assert profiles.data_frame.index.name == 'ID'
 
-        for column_name in ['RAW', 'LS', 'DTI_L1', 'DTI_MD', 'DTI_RX', 'DTI_FA', 'FUNC']:
+        for column_name in ['RAW', 'LS', 'DTI_L1', 'DTI_MD',
+                            'DTI_RX', 'DTI_FA', 'FUNC']:
             assert column_name in profiles.data_frame.columns
+            first_i = profiles.data_frame[column_name].first_valid_index()
+            assert profiles.data_frame[column_name][first_i].shape == (76, 76)
 
     def test_fail_duplicates_id(self, datafiles):
         path = os.path.join(str(datafiles), 'duplicated_id')
