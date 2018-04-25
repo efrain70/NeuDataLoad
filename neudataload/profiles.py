@@ -193,6 +193,7 @@ class NeuProfiles(object):
             *columns: columns with the matrix to be spread out
             keep_matrix: if True the original column with the matrix wont be
             removed.
+            inplace: if True overwrite the date frame attribute.
 
         Returns:
             A dataframe with a new column for each coordenate of the matrix and
