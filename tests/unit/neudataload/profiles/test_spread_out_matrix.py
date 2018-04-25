@@ -192,7 +192,7 @@ class TestExtedMatrix(object):
 
         assert (old_dataframe == profiles.data_frame).all().all()
 
-    def test_inplace_false(self, datafiles):
+    def test_inplace_true(self, datafiles):
         path = os.path.join(str(datafiles), 'small_data')
         filename = 'profiles.xlsx'
 
