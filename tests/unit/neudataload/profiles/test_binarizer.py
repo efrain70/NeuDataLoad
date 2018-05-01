@@ -73,4 +73,4 @@ class TestBinarize(object):
             profiles.get_multilabel('profile', groups)
 
         # W not found
-        assert str(error.value) == 'W'
+        assert str(error.value) == "'W'"
