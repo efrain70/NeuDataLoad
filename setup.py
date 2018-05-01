@@ -26,6 +26,8 @@ setup(
         'pandas',
         'xlrd',
         'six',
+        'numpy',
+        'sklearn',
     ],
     license='CC BY-NC-SA 4.0',
     zip_safe=False,
