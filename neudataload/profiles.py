@@ -9,6 +9,9 @@ import os
 import numpy as np
 import pandas
 
+from sklearn.preprocessing import MultiLabelBinarizer
+
+
 DIR_CONFIGURATION = {
     # "CONTROLS",
     # "CONTROLS/ADJACENCY_MATRICES_GRAPH",
@@ -228,4 +231,23 @@ class NeuProfiles(object):
         if inplace:
             self.data_frame = df
 
-        return df
+        return df.copy()
+
+    def get_multilabel(self, column, groups):
+        """Convert a class atribut to a binary matrix indicating
+        the presence of a class label in the instance.
+
+        Args:
+            column: column to extract the feature values
+            groups: dictionary as key the class, value list of groups
+
+        Returns:
+           Binary matrix with the presence of the label
+        """
+
+        y_values = self.data_frame[column].values
+        y_multi = [groups[value] for value in y_values]
+
+        binarizer = MultiLabelBinarizer().fit(y_multi)
+
+        return binarizer.transform(y_multi)
