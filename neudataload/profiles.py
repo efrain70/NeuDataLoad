@@ -8,6 +8,8 @@ import os
 
 import numpy as np
 import pandas
+from sklearn.preprocessing import MultiLabelBinarizer
+
 
 DIR_CONFIGURATION = {
     # "CONTROLS",
@@ -193,6 +195,7 @@ class NeuProfiles(object):
             *columns: columns with the matrix to be spread out
             keep_matrix: if True the original column with the matrix wont be
             removed.
+            inplace: if True overwrite the date frame attribute.
 
         Returns:
             A dataframe with a new column for each coordenate of the matrix and
@@ -227,4 +230,24 @@ class NeuProfiles(object):
         if inplace:
             self.data_frame = df
 
-        return df
+        return df.copy()
+
+    def get_multilabel(self, column, groups):
+        """Convert a class attribute to a binary matrix.
+
+        By indicating the presence of a class label in the instance with 0,1.
+
+        Args:
+            column: column to extract the feature values
+            groups: dictionary as key the class, value list of groups
+
+        Returns:
+           Binary matrix with the presence of the label
+
+        """
+        y_values = self.data_frame[column].values
+        y_multi = [groups[value] for value in y_values]
+
+        binarizer = MultiLabelBinarizer().fit(y_multi)
+
+        return binarizer.transform(y_multi)

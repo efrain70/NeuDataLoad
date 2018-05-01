@@ -2,6 +2,9 @@
 pandas
 xlrd
 six
+numpy
+sklearn
+scipy
 
 # build requirements
 wheel>=0.30.0a0
