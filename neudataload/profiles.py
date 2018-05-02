@@ -188,7 +188,8 @@ class NeuProfiles(object):
             logging.warning('Index (id) {} couldn\'t be found, '
                             'skipped (file {})'.format(index, file_name))
 
-    def spread_out_matrix(self, columns, symmetric=True, keep_matrix=False, inplace=True):
+    def spread_out_matrix(self, columns, symmetric=True, keep_matrix=False,
+                          inplace=True):
         """Spread out the values of matrix saved in columns.
 
         Args:
