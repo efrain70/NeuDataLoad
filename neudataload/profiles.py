@@ -193,7 +193,6 @@ class NeuProfiles(object):
 
         If the value is bigger than threshold 1 else 0
 
-
         Args:
             *columns: columns with the matrix to be binarized
             threshold: threshold for the matrix values, default 0
@@ -201,6 +200,7 @@ class NeuProfiles(object):
 
         Returns:
             A dataframe with binarized matrix.
+
         """
         df = self.data_frame
 
