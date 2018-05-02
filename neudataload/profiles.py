@@ -188,17 +188,18 @@ class NeuProfiles(object):
             logging.warning('Index (id) {} couldn\'t be found, '
                             'skipped (file {})'.format(index, file_name))
 
-    def spread_out_matrix(self, columns, keep_matrix=False, inplace=True):
+    def spread_out_matrix(self, columns, symmetric=True, keep_matrix=False, inplace=True):
         """Spread out the values of matrix saved in columns.
 
         Args:
             *columns: columns with the matrix to be spread out
+            symmetric: matrix are symmetric, ignored half matrix
             keep_matrix: if True the original column with the matrix wont be
             removed.
             inplace: if True overwrite the date frame attribute.
 
         Returns:
-            A dataframe with a new column for each coordenate of the matrix and
+            A dataframe with a new column for each coordinate of the matrix and
             for each matrix.
 
         """
@@ -220,6 +221,12 @@ class NeuProfiles(object):
             df_reshaped = pandas.DataFrame(
                 values, columns=new_columns, index=reshaped.index)
 
+            if symmetric:
+                no_duplicated = ['{}_{}_{}'.format(column, str(x), str(y))
+                                 for x in list(range(0, max_dim))
+                                 for y in list(range(0, x))]
+
+                df_reshaped = df_reshaped.filter(items=no_duplicated)
             new_dfs.append(df_reshaped)
 
         if not keep_matrix:
