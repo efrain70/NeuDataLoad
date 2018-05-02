@@ -49,7 +49,7 @@ class TestExtedMatrix(object):
         profiles.load()
 
         new_dataframe = profiles.spread_out_matrix(
-            ['DTI_L1'], keep_matrix=False)
+            ['DTI_L1'], keep_matrix=False, symmetric=False)
 
         assert [
             'DTI_FA',
@@ -78,7 +78,8 @@ class TestExtedMatrix(object):
         profiles.load()
 
         new_dataframe = profiles.spread_out_matrix(['DTI_L1', 'DTI_FA'],
-                                                   keep_matrix=False)
+                                                   keep_matrix=False,
+                                                   symmetric=False)
 
         assert [
             'DTI_FA_0_0', 'DTI_FA_0_1', 'DTI_FA_0_2',
@@ -121,7 +122,8 @@ class TestExtedMatrix(object):
         profiles.load()
 
         new_dataframe = profiles.spread_out_matrix(['DTI_L1', 'DTI_FA',],
-                                                   keep_matrix=True)
+                                                   keep_matrix=True,
+                                                   symmetric=False)
 
         assert [
             'DTI_FA',
@@ -174,7 +176,7 @@ class TestExtedMatrix(object):
         old_dataframe = profiles.data_frame
 
         new_dataframe = profiles.spread_out_matrix(
-            ['DTI_L1'], keep_matrix=False, inplace=False)
+            ['DTI_L1'], keep_matrix=False, inplace=False, symmetric=False)
 
         assert [
             'DTI_FA',
@@ -200,7 +202,7 @@ class TestExtedMatrix(object):
         profiles.load()
 
         new_dataframe = profiles.spread_out_matrix(
-            ['DTI_L1'], keep_matrix=False, inplace=True)
+            ['DTI_L1'], keep_matrix=False, inplace=True, symmetric=False)
 
         assert [
             'DTI_FA',
@@ -217,3 +219,33 @@ class TestExtedMatrix(object):
             assert new_column in profiles.data_frame.columns
 
         assert (new_dataframe == profiles.data_frame).all().all()
+
+    def test_symmetric_true(self, datafiles):
+
+        path = os.path.join(str(datafiles), 'small_data')
+        filename = 'profiles.xlsx'
+
+        profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
+        profiles.load()
+
+        new_dataframe = profiles.spread_out_matrix(['DTI_L1', 'DTI_FA'],
+                                                   keep_matrix=False,
+                                                   symmetric=True)
+        assert [
+                   'DTI_FA_1_0',
+                   'DTI_FA_2_0', 'DTI_FA_2_1',
+
+
+                   'DTI_L1_1_0',
+                   'DTI_L1_2_0', 'DTI_L1_2_1',
+               ] == sorted(list(new_dataframe.columns))
+
+        assert new_dataframe.DTI_L1_1_0[0] == 14
+
+        assert new_dataframe.DTI_L1_2_0[0] == 17
+        assert new_dataframe.DTI_L1_2_1[0] == 18
+
+        assert new_dataframe.DTI_FA_1_0[0] == 4
+
+        assert new_dataframe.DTI_FA_2_0[0] == 7
+        assert new_dataframe.DTI_FA_2_1[0] == 8
