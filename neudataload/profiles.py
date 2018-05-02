@@ -188,6 +188,31 @@ class NeuProfiles(object):
             logging.warning('Index (id) {} couldn\'t be found, '
                             'skipped (file {})'.format(index, file_name))
 
+    def binarize_matrix(self, columns, threshold=0, inplace=True):
+        """Convert the columns with matrix in binary values.
+
+        If the value is bigger than threshold 1 else 0
+
+
+        Args:
+            *columns: columns with the matrix to be binarized
+            threshold: threshold for the matrix values, default 0
+            inplace: if True overwrite the date frame attribute.
+
+        Returns:
+            A dataframe with binarized matrix.
+        """
+        df = self.data_frame
+
+        for column in columns:
+            df[column] = df[df[column].notnull()][column].apply(
+                lambda x: 1 * (x > threshold))
+
+        if inplace:
+            self.data_frame = df
+
+        return df.copy()
+
     def spread_out_matrix(self, columns, symmetric=True, keep_matrix=False,
                           inplace=True):
         """Spread out the values of matrix saved in columns.
