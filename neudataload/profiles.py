@@ -213,6 +213,31 @@ class NeuProfiles(object):
 
         return df.copy()
 
+    def combine_matrix(self, columns, column_result, func=np.mean,
+                       inplace=True):
+        """Apply a function to a set of columns with contains matrices.
+
+        Args:
+            columns: name of columns with matrix
+            column_result: name of column for saving
+            func: function to be applied
+            inplace: if True overwrite the date frame attribute.
+
+        Returns:
+            A dataframe with a new column for the resutl.
+
+        """
+        df = self.data_frame
+
+        compresed = [df[c].values for c in columns]
+
+        df[column_result] = func(compresed, axis=0)
+
+        if inplace:
+            self.data_frame = df
+
+        return df.copy()
+
     def spread_out_matrix(self, columns, symmetric=True, keep_matrix=False,
                           inplace=True):
         """Spread out the values of matrix saved in columns.
