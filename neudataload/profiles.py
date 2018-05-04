@@ -8,7 +8,7 @@ import os
 
 import numpy as np
 import pandas
-from sklearn.preprocessing import MultiLabelBinarizer
+
 from .utils import binarize_matrix, combine_matrix, spread_out_matrix
 
 DIR_CONFIGURATION = {
@@ -254,22 +254,3 @@ class NeuProfiles(object):
 
         return df.copy()
 
-    def get_multilabel(self, column, groups):
-        """Convert a class attribute to a binary matrix.
-
-        By indicating the presence of a class label in the instance with 0,1.
-
-        Args:
-            column: column to extract the feature values
-            groups: dictionary as key the class, value list of groups
-
-        Returns:
-           Binary matrix with the presence of the label
-
-        """
-        binarizer = MultiLabelBinarizer()
-        y_multi = self.data_frame[column].apply(lambda x: groups[x])
-        values = binarizer.fit_transform(y_multi)
-
-        return pandas.DataFrame(data=values, columns=binarizer.classes_,
-                                index=self.data_frame.index)

@@ -3,7 +3,7 @@ import os
 import pytest
 
 from neudataload.profiles import NeuProfiles
-
+from neudataload import utils
 
 FIXTURE_DIR = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
@@ -36,7 +36,9 @@ class TestBinarize(object):
           'X': [],
           'W': []
         }
-        df = profiles.get_multilabel('profile', groups)
+
+        data_frame = profiles.data_frame
+        df = utils.get_multilabel(data_frame, 'profile', groups)
         values = df.as_matrix()
 
         # 3 columns, 63 items
@@ -65,6 +67,8 @@ class TestBinarize(object):
 
         profiles.load()
 
+        data_frame = profiles.data_frame
+
         groups = {
           'A': [1],
           'B': [2],
@@ -74,7 +78,7 @@ class TestBinarize(object):
           'X': [],
         }
         with pytest.raises(KeyError) as error:
-            profiles.get_multilabel('profile', groups)
+            utils.get_multilabel(data_frame, 'profile', groups)
 
         # W not found
         assert 'W' in str(error.value)

@@ -1,6 +1,7 @@
-
 import numpy as np
 import pandas as pd
+
+from sklearn.preprocessing import MultiLabelBinarizer
 
 
 def binarize_matrix(data_frame, columns, threshold=0):
@@ -55,3 +56,25 @@ def spread_out_matrix(data_frame, columns, symmetric=True, keep_matrix=False):
 
     return pd.concat([df, ] + new_dfs, axis=1)
 
+
+def get_multilabel(data_frame, column, groups):
+    """Convert a class attribute to a binary matrix.
+
+    By indicating the presence of a class label in the instance with 0,1.
+
+    Args:
+        data_frame: data frame with the column
+        column: column to extract the feature values
+        groups: dictionary as key the class, value list of groups
+
+    Returns:
+       Binary matrix with the presence of the label
+
+    """
+    binarizer = MultiLabelBinarizer()
+
+    y_multi = data_frame[column].apply(lambda x: groups[x])
+    values = binarizer.fit_transform(y_multi)
+
+    return pd.DataFrame(data=values, columns=binarizer.classes_,
+                        index=data_frame.index)
