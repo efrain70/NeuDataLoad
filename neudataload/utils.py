@@ -39,7 +39,7 @@ def spread_out_matrix(data_frame, columns, symmetric=True, keep_matrix=False):
                        for x in list(range(0, max_dim))
                        for y in list(range(0, max_dim))]
 
-        df_reshaped = pandas.DataFrame(
+        df_reshaped = pd.DataFrame(
             values, columns=new_columns, index=reshaped.index)
 
         if symmetric:
