@@ -231,7 +231,8 @@ class NeuProfiles(object):
 
         compresed = [df[c].values for c in columns]
 
-        df[column_result] = func(compresed, axis=0)
+        values_result = np.asarray(func(compresed, axis=0))
+        df = df.assign(**{column_result: values_result})
 
         if inplace:
             self.data_frame = df
