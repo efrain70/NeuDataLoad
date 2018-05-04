@@ -9,7 +9,7 @@ import os
 import numpy as np
 import pandas
 from sklearn.preprocessing import MultiLabelBinarizer
-from .utils import binarize_matrix, combine_matrix
+from .utils import binarize_matrix, combine_matrix, spread_out_matrix
 
 DIR_CONFIGURATION = {
     # "CONTROLS",
@@ -246,36 +246,8 @@ class NeuProfiles(object):
             for each matrix.
 
         """
-        df = self.data_frame
-
-        new_dfs = list()
-
-        for column in columns:
-            reshaped = df[df[column].notnull()][column].apply(
-                lambda x: x.reshape(-1))
-
-            max_dim = int(np.sqrt(reshaped.apply(len).max()))
-
-            values = reshaped.values.tolist()
-            new_columns = ['{}_{}_{}'.format(column, str(x), str(y))
-                           for x in list(range(0, max_dim))
-                           for y in list(range(0, max_dim))]
-
-            df_reshaped = pandas.DataFrame(
-                values, columns=new_columns, index=reshaped.index)
-
-            if symmetric:
-                no_duplicated = ['{}_{}_{}'.format(column, str(x), str(y))
-                                 for x in list(range(0, max_dim))
-                                 for y in list(range(0, x))]
-
-                df_reshaped = df_reshaped.filter(items=no_duplicated)
-            new_dfs.append(df_reshaped)
-
-        if not keep_matrix:
-            df = df.drop(columns=list(columns))
-
-        df = pandas.concat([df, ] + new_dfs, axis=1)
+        df = spread_out_matrix(self.data_frame, columns, symmetric,
+                               keep_matrix)
 
         if inplace:
             self.data_frame = df
