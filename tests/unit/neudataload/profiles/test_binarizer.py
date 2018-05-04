@@ -36,7 +36,8 @@ class TestBinarize(object):
           'X': [],
           'W': []
         }
-        values = profiles.get_multilabel('profile', groups)
+        df = profiles.get_multilabel('profile', groups)
+        values = df.as_matrix()
 
         # 3 columns, 63 items
         assert values.shape == (63, 3)
@@ -50,6 +51,9 @@ class TestBinarize(object):
         assert (values[profiles.data_frame.profile == 'A-B-C'] == [1, 1, 1]).all()
 
         assert (values[profiles.data_frame.profile == 'X'] == [0, 0, 0]).all()
+
+        assert (df.columns == [1, 2, 3]).all()
+        assert (df.index == profiles.data_frame.index).all()
 
     def test_not_found(self, datafiles):
         path = os.path.join(str(datafiles), 'valid')

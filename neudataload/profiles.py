@@ -303,5 +303,9 @@ class NeuProfiles(object):
            Binary matrix with the presence of the label
 
         """
+        binarizer = MultiLabelBinarizer()
         y_multi = self.data_frame[column].apply(lambda x: groups[x])
-        return MultiLabelBinarizer().fit_transform(y_multi)
+        values = binarizer.fit_transform(y_multi)
+
+        return pandas.DataFrame(data=values, columns=binarizer.classes_,
+                                index=self.data_frame.index)
