@@ -9,7 +9,7 @@ import os
 import numpy as np
 import pandas
 from sklearn.preprocessing import MultiLabelBinarizer
-
+from .utils import binarize_matrix
 
 DIR_CONFIGURATION = {
     # "CONTROLS",
@@ -202,11 +202,7 @@ class NeuProfiles(object):
             A dataframe with binarized matrix.
 
         """
-        df = self.data_frame
-
-        for column in columns:
-            df[column] = df[df[column].notnull()][column].apply(
-                lambda x: 1 * (x > threshold))
+        df = binarize_matrix(self.data_frame, columns, threshold)
 
         if inplace:
             self.data_frame = df
