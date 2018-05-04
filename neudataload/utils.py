@@ -1,11 +1,28 @@
+"""neudataload.utils.
+
+Utils for managing matrices in data frames.
+"""
+
 import numpy as np
 import pandas as pd
-
 from sklearn.preprocessing import MultiLabelBinarizer
 
 
 def binarize_matrix(data_frame, columns, threshold=0):
+    """Binarize with 1/0 the content of the matrices located in columns.
 
+    The matrices are located in the columns of a data frame, if their values
+    is bigger than threshold, 1 if not 0.
+
+    Args:
+        data_frame: dataframe with matrices in columns
+        columns: name of the columns
+        threshold: value of threshold
+
+    Returns:
+        Data frame with its matrices binarized with 1 and 0
+
+    """
     for column in columns:
         data_frame[column] = data_frame[
             data_frame[column].notnull()][column].apply(
@@ -15,6 +32,19 @@ def binarize_matrix(data_frame, columns, threshold=0):
 
 
 def combine_matrix(data_frame, columns, column_result, func=np.mean):
+    """Mix matrices located in colunms of a data frame using a function.
+
+    Args:
+        data_frame: data frame with matrices.
+        columns: columns of data frame where matrices ar located
+        column_result: column of data frame for allocation the result.
+        func: function for merging the values of the matrices.
+
+    Returns:
+        Data frame with extra new column that contains a combination of
+        matrices.
+
+    """
     compressed = [data_frame[c].values for c in columns]
 
     values_result = np.asarray(func(compressed, axis=0))
@@ -24,7 +54,19 @@ def combine_matrix(data_frame, columns, column_result, func=np.mean):
 
 
 def spread_out_matrix(data_frame, columns, symmetric=True, keep_matrix=False):
+    """Spread out a list of matrix located in columns of a data frame.
 
+    Args:
+        data_frame: data frame with matrices in columns
+        columns: column names
+        symmetric: if True, remove the repeated half of the matrix.
+        keep_matrix: if False, keep the original column with the matrices.
+
+    Returns:
+        A data frame with a new column for each coordinate of the matrix and
+        for each matrix.
+
+    """
     df = data_frame
 
     new_dfs = list()
@@ -68,7 +110,8 @@ def get_multilabel(data_frame, column, groups):
         groups: dictionary as key the class, value list of groups
 
     Returns:
-       Binary matrix with the presence of the label
+       Binary data frame with the presence of the label. Class names as
+       column names.
 
     """
     binarizer = MultiLabelBinarizer()

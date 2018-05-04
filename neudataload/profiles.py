@@ -220,7 +220,7 @@ class NeuProfiles(object):
             inplace: if True overwrite the date frame attribute.
 
         Returns:
-            A dataframe with a new column for the resutl.
+            A dataframe with a new column for the result.
 
         """
         df = combine_matrix(self.data_frame, columns, column_result, func)
@@ -253,4 +253,3 @@ class NeuProfiles(object):
             self.data_frame = df
 
         return df.copy()
-
