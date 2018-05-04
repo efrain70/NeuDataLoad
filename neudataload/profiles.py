@@ -8,8 +8,8 @@ import os
 
 import numpy as np
 import pandas
-from sklearn.preprocessing import MultiLabelBinarizer
 
+from .utils import binarize_matrix, combine_matrix, spread_out_matrix
 
 DIR_CONFIGURATION = {
     # "CONTROLS",
@@ -202,11 +202,7 @@ class NeuProfiles(object):
             A dataframe with binarized matrix.
 
         """
-        df = self.data_frame
-
-        for column in columns:
-            df[column] = df[df[column].notnull()][column].apply(
-                lambda x: 1 * (x > threshold))
+        df = binarize_matrix(self.data_frame, columns, threshold)
 
         if inplace:
             self.data_frame = df
@@ -224,15 +220,10 @@ class NeuProfiles(object):
             inplace: if True overwrite the date frame attribute.
 
         Returns:
-            A dataframe with a new column for the resutl.
+            A dataframe with a new column for the result.
 
         """
-        df = self.data_frame
-
-        compresed = [df[c].values for c in columns]
-
-        values_result = np.asarray(func(compresed, axis=0))
-        df = df.assign(**{column_result: values_result})
+        df = combine_matrix(self.data_frame, columns, column_result, func)
 
         if inplace:
             self.data_frame = df
@@ -255,58 +246,10 @@ class NeuProfiles(object):
             for each matrix.
 
         """
-        df = self.data_frame
-
-        new_dfs = list()
-
-        for column in columns:
-            reshaped = df[df[column].notnull()][column].apply(
-                lambda x: x.reshape(-1))
-
-            max_dim = int(np.sqrt(reshaped.apply(len).max()))
-
-            values = reshaped.values.tolist()
-            new_columns = ['{}_{}_{}'.format(column, str(x), str(y))
-                           for x in list(range(0, max_dim))
-                           for y in list(range(0, max_dim))]
-
-            df_reshaped = pandas.DataFrame(
-                values, columns=new_columns, index=reshaped.index)
-
-            if symmetric:
-                no_duplicated = ['{}_{}_{}'.format(column, str(x), str(y))
-                                 for x in list(range(0, max_dim))
-                                 for y in list(range(0, x))]
-
-                df_reshaped = df_reshaped.filter(items=no_duplicated)
-            new_dfs.append(df_reshaped)
-
-        if not keep_matrix:
-            df = df.drop(columns=list(columns))
-
-        df = pandas.concat([df, ] + new_dfs, axis=1)
+        df = spread_out_matrix(self.data_frame, columns, symmetric,
+                               keep_matrix)
 
         if inplace:
             self.data_frame = df
 
         return df.copy()
-
-    def get_multilabel(self, column, groups):
-        """Convert a class attribute to a binary matrix.
-
-        By indicating the presence of a class label in the instance with 0,1.
-
-        Args:
-            column: column to extract the feature values
-            groups: dictionary as key the class, value list of groups
-
-        Returns:
-           Binary matrix with the presence of the label
-
-        """
-        binarizer = MultiLabelBinarizer()
-        y_multi = self.data_frame[column].apply(lambda x: groups[x])
-        values = binarizer.fit_transform(y_multi)
-
-        return pandas.DataFrame(data=values, columns=binarizer.classes_,
-                                index=self.data_frame.index)
