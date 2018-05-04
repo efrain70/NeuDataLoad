@@ -9,7 +9,7 @@ import os
 import numpy as np
 import pandas
 from sklearn.preprocessing import MultiLabelBinarizer
-from .utils import binarize_matrix
+from .utils import binarize_matrix, combine_matrix
 
 DIR_CONFIGURATION = {
     # "CONTROLS",
@@ -223,12 +223,7 @@ class NeuProfiles(object):
             A dataframe with a new column for the resutl.
 
         """
-        df = self.data_frame
-
-        compresed = [df[c].values for c in columns]
-
-        values_result = np.asarray(func(compresed, axis=0))
-        df = df.assign(**{column_result: values_result})
+        df = combine_matrix(self.data_frame, columns, column_result, func)
 
         if inplace:
             self.data_frame = df
