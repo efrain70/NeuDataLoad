@@ -1,13 +1,10 @@
 """Combine matrix transformer class."""
 
-from sklearn.base import BaseEstimator, TransformerMixin
-
-
-import numpy as np
-from pandas import DataFrame
-
 
 from neudataload import combine_matrix
+import numpy as np
+from pandas import DataFrame
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
 class CombineMatrixTransformer(BaseEstimator, TransformerMixin):
