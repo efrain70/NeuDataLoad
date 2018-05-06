@@ -47,7 +47,7 @@ class SpreadOutMatrixTransformer(BaseEstimator, TransformerMixin):
         df = x
         is_df = False
 
-        if self.columns:
+        if self.columns is not None and any(self.columns):
             if not isinstance(x, DataFrame):
                 df = DataFrame(data=x)
                 is_df = True
