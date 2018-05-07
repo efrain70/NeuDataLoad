@@ -129,6 +129,8 @@ class NeuProfiles(object):
             None
 
         """
+        index_list_error = list()
+
         if self.format_file == 'xls':
             path = os.path.join(self.profile_path, self.profiles_filename)
 
@@ -161,8 +163,18 @@ class NeuProfiles(object):
                                 lambda x: x.endswith(end_name), files)}
 
                         for file_name, matrix in matrix_values.items():
-                            self._save_to_dataframe(
+                            index_error = self._save_to_dataframe(
                                 file_name, matrix, end_name, column_name)
+                            if index_error is not None and \
+                                    index_error not in index_list_error:
+                                index_list_error.append(index_error)
+
+            if index_list_error:
+                logging.warning(
+                    'Index {} couldn\'t be found '
+                    'in main file (total {} index(es)).'.format(
+                        ', '.join(index_list_error), len(index_list_error)
+                    ))
 
         else:
             raise NotImplementedError(
@@ -185,8 +197,9 @@ class NeuProfiles(object):
                     'Already existing value at [{}, {}]: Value from {} '
                     'cannot be loaded.'.format(index, column_name, file_name))
         else:
-            logging.warning('Index (id) {} couldn\'t be found, '
-                            'skipped (file {})'.format(index, file_name))
+            logging.debug('Index (id) {} couldn\'t be found, '
+                          'skipped (file {})'.format(index, file_name))
+            return index
 
     def binarize_matrix(self, columns, threshold=0, inplace=True):
         """Convert the columns with matrix in binary values.
