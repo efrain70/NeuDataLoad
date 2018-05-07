@@ -138,4 +138,4 @@ class TestSelection(object):
         ])
         output = pipe.fit_transform(profiles.data_frame.values)
 
-        assert output[0] == 14
+        assert int(output[0]) == 14
