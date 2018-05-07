@@ -132,10 +132,10 @@ class TestSelection(object):
         assert profiles.data_frame is not None
 
         pipe = Pipeline([
-            ('spread', SpreadOutMatrixTransformer(columns=[0, 1])),
+            ('spread', SpreadOutMatrixTransformer(columns=['0', '1'])),
             ('selecting', FeatureMatrixTransformer(
-                matrix_columns=[0], columns=None)),
+                matrix_columns=['0'], columns=None)),
         ])
         output = pipe.fit_transform(profiles.data_frame.values)
 
-        assert (output == 14).all()
+        assert output[0] == 14

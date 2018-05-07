@@ -134,7 +134,7 @@ class TestSpreadout(object):
         assert profiles.data_frame is not None
 
         pipe = Pipeline([
-            ('spread', SpreadOutMatrixTransformer(columns=[0, 1])),
+            ('spread', SpreadOutMatrixTransformer(columns=['0', '1'])),
         ])
         output = pipe.fit_transform(profiles.data_frame.values)
 

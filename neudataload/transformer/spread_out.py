@@ -49,7 +49,8 @@ class SpreadOutMatrixTransformer(BaseEstimator, TransformerMixin):
 
         if self.columns is not None and any(self.columns):
             if not isinstance(x, DataFrame):
-                df = DataFrame(data=x)
+                columns = [str(c_i) for c_i in range(x.shape[1])]
+                df = DataFrame(data=x, columns=columns)
                 is_df = True
             df = spread_out_matrix(df, self.columns, keep_matrix=False,
                                    symmetric=self.symmetric)
