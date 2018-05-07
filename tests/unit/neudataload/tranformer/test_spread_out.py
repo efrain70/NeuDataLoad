@@ -138,4 +138,5 @@ class TestSpreadout(object):
         ])
         output = pipe.fit_transform(profiles.data_frame.values)
 
-        assert (output == np.array([[14., 17., 18.,  4.,  7.,  8.]])).all()
+        assert output.tolist() == [[14., 17., 18.,  4.,  7.,  8.]] or \
+            output.tolist() == [[4., 7., 8.,  14.,  17.,  18.]]
