@@ -3,9 +3,26 @@
 Utils for managing matrices in data frames.
 """
 
+import itertools
+
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MultiLabelBinarizer
+
+
+def all_combinations(iterable):
+    """Create a list of interation with all the combinations.
+
+    Args:
+        iterable: iterable with the elements
+
+    Returns:
+        iterable of tuples with the all combinations of 0-N sizes.
+
+    """
+    return itertools.chain.from_iterable(
+        itertools.combinations(iterable, i + 1)
+        for i in range(len(iterable)))
 
 
 def binarize_matrix(data_frame, columns, threshold=0):
