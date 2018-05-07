@@ -1,5 +1,6 @@
 import os
 
+import numpy as np
 import pytest
 from sklearn.pipeline import Pipeline
 
@@ -133,14 +134,11 @@ class TestCombinations(object):
 
         pipe = Pipeline([
             ('combining', CombineMatrixTransformer(
-                columns=[0, 1],
+                columns=['0', '1'],
                 column_name='combined')),
         ])
+
         output = pipe.fit_transform(profiles.data_frame.values)
-
-        import numpy as np
-
-        assert (output[0][0][0] == [11, 12, 13]).all()
 
         assert (output[0][0] == np.asarray(
             [[11, 12, 13], [14, 15, 16], [17, 18, 19]])).all()

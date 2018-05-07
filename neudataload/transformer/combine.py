@@ -52,11 +52,18 @@ class CombineMatrixTransformer(BaseEstimator, TransformerMixin):
 
         if self.columns and self.column_name:
             if not isinstance(x, DataFrame):
-                df = DataFrame(data=x)
+                columns = [str(c_i) for c_i in range(x.shape[1])]
+                self.column_name = str(x.shape[1] + 1)
+
+                df = DataFrame(data=x, columns=columns)
+
                 is_df = True
 
             df = combine_matrix(
                 df, columns=self.columns,
                 column_result=self.column_name, func=self.op)
 
-        return df if not is_df else df.values
+        import ipdb; ipdb.set_trace()
+
+        return df if not is_df else df.as_matrix(
+            columns=df.columns.sort_values())
