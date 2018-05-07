@@ -98,6 +98,19 @@ class TestLoad(object):
             assert 'directory with ' in record.message
 
     def test_debug(self, datafiles, caplog):
+        caplog.set_level(logging.DEBUG)
+        path = os.path.join(str(datafiles), 'index_not_found')
+        filename = 'profiles.xlsx'
+        profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
+        profiles.load()
+        assert len(caplog.records) == 5
+
+        assert caplog.records[2].levelname == 'DEBUG'
+        assert caplog.records[2].message == \
+            "Index (id) FIS_007 couldn't be found, skipped " \
+            "(file FIS_007_FA_factor.csv)"
+
+    def test_warning(self, datafiles, caplog):
         caplog.set_level(logging.INFO)
         path = os.path.join(str(datafiles), 'index_not_found')
         filename = 'profiles.xlsx'
@@ -105,6 +118,6 @@ class TestLoad(object):
         profiles.load()
         assert len(caplog.records) == 4
 
-        assert caplog.records[2].levelname == 'WARNING'
-        assert caplog.records[2].message == "Index (id) FIS_007 couldn't be found, skipped " \
-                                            "(file FIS_007_FA_factor.csv)"
+        assert caplog.records[3].levelname == 'WARNING'
+        assert caplog.records[3].message == \
+            "Index FIS_007 couldn't be found in main file (total 1 index(es))."
