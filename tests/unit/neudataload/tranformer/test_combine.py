@@ -140,6 +140,8 @@ class TestCombinations(object):
 
         import numpy as np
 
+        assert (output[0][0][0] == [11, 12, 13]).all()
+
         assert (output[0][0] == np.asarray(
             [[11, 12, 13], [14, 15, 16], [17, 18, 19]])).all()
 
