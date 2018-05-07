@@ -63,7 +63,5 @@ class CombineMatrixTransformer(BaseEstimator, TransformerMixin):
                 df, columns=self.columns,
                 column_result=self.column_name, func=self.op)
 
-        import ipdb; ipdb.set_trace()
-
         return df if not is_df else df.as_matrix(
             columns=df.columns.sort_values())
