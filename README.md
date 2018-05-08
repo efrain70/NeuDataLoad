@@ -25,15 +25,17 @@ Upgrading:
 
 ### Full Dev Installation
 
-If you need to change the configuration or the soucere code:
+If you need to change the configuration or the source code:
 
 1. Clone NeuDataLoad.git repository to your local machine:
-
-    ``$ git clone https://github.com/efrain70/neudataload.git``
+```shell
+$ git clone https://github.com/efrain70/neudataload.git
+```
 
 2. Install NeuDataLoad in development mode:
-
-    ``$ pip install -e _full_path_where_you_store_repos_/NeuDataLoad``
+```shell
+    $ pip install -e _full_path_where_you_store_repos_/NeuDataLoad
+```
 
 ### Important links
 
