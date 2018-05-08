@@ -14,13 +14,14 @@ Only if you don’t need to edit the default configuration or source code at all
 
 In terminal:
 
-      ``$ pip install git+https://github.com/efrain70/neudataload.git@master
-``
+     ```shell
+     $ pip install git+https://github.com/efrain70/neudataload.git@master
 
+    ```
+    
 Upgrading:
 
-      ``$ pip install --upgrade git+https://github.com/efrain70/neudataload.git@master
-``
+     ``$ pip install --upgrade git+https://github.com/efrain70/neudataload.git@master``
 
 ### Full Dev Installation
 
