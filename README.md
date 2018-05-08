@@ -34,10 +34,16 @@ If you need to change the configuration or the soucere code:
 
     ``$ pip install -e _full_path_where_you_store_repos_/NeuDataLoad``
 
-###Important links
+### Important links
 
 Please follow below links to find additional important info on the library:
 
-- `Project page <https://github.com/efrain70/NeuDataLoad>`_
-- `Documentation <https://github.com/efrain70/NeuDataLoad>`_
-- `Source code <https://github.com/efrain70/NeuDataLoad.git>`_
+- Project page https://github.com/efrain70/NeuDataLoad
+- Documentation https://github.com/efrain70/NeuDataLoad
+- Source code https://github.com/efrain70/NeuDataLoad.git
+
+## Authors  <a name="authors"></a> 
+
+Main developer:
+
+* Efraín Lima Miranda https://github.com/efrain70/
