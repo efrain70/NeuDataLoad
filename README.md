@@ -15,7 +15,7 @@ Only if you don’t need to edit the default configuration or source code at all
 In terminal:
 
 ```shell
-     $ pip install git+https://github.com/efrain70/neudataload.git@master
+    $ pip install git+https://github.com/efrain70/neudataload.git@master
 ```
     
 Upgrading:
@@ -29,7 +29,7 @@ If you need to change the configuration or the source code:
 
 1. Clone NeuDataLoad.git repository to your local machine:
 ```shell
-$ git clone https://github.com/efrain70/neudataload.git
+    $ git clone https://github.com/efrain70/neudataload.git
 ```
 
 2. Install NeuDataLoad in development mode:
