@@ -42,7 +42,7 @@ If you need to change the configuration or the source code:
 Please follow below links to find additional important info on the library:
 
 - Project page https://github.com/efrain70/NeuDataLoad
-- Documentation https://github.com/efrain70/NeuDataLoad
+- Documentation https://efrain70.github.com/NeuDataLoad
 - Source code https://github.com/efrain70/NeuDataLoad.git
 
 ## Authors  <a name="authors"></a> 
