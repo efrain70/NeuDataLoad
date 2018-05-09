@@ -98,7 +98,7 @@ class TestCombinations(object):
 
         assert sorted(list(output.columns)) == ['DTI_FA', 'DTI_L1']
 
-    def test_witout_columns(self, datafiles):
+    def test_without_columns(self, datafiles):
 
         path = os.path.join(str(datafiles), 'small_data')
         filename = 'profiles.xlsx'
@@ -118,6 +118,33 @@ class TestCombinations(object):
         output = pipe.fit_transform(profiles.data_frame)
 
         assert sorted(list(output.columns)) == ['DTI_FA', 'DTI_L1']
+
+    def test_only_one(self, datafiles):
+        path = os.path.join(str(datafiles), 'small_data')
+        filename = 'profiles.xlsx'
+
+        profiles = NeuProfiles(profiles_path=path, profiles_filename=filename)
+
+        assert profiles.data_frame is None
+
+        profiles.load()
+
+        assert profiles.data_frame is not None
+
+        params = {'combining__columns': ['DTI_FA', ],
+                  'combining__column_name': 'combined',
+                  }
+
+        pipe = Pipeline([
+            ('combining', CombineMatrixTransformer()),
+        ])
+        pipe.set_params(**params)
+
+        output = pipe.fit_transform(profiles.data_frame)
+
+        assert sorted(list(output.columns)) == ['DTI_FA', 'DTI_L1', 'combined']
+
+        assert (output.combined.FIS_007 == output.DTI_FA.FIS_007).all()
 
     def test_no_df_simple(self, datafiles):
 
