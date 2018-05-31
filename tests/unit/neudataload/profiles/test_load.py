@@ -53,7 +53,7 @@ class TestLoad(object):
 
         if six.PY2:
             assert str(error.value) == "Index has duplicate keys: " \
-                                       "Index([u'FIS_007', u'TTO_06'], dtype='object', name='ID')"
+                                       "Index([u'FIS_007', u'TTO_06'], dtype='object', name=u'ID')"
         else:
             assert str(error.value) == "Index has duplicate keys: " \
                                        "Index(['FIS_007', 'TTO_06'], dtype='object', name='ID')"
