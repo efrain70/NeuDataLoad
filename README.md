@@ -10,7 +10,7 @@ in directories to be used by Machine Learning algorithms.
 
 ### Basic Installation
 
-Only if you don’t need to edit the default configuration or source code at all. Latest packaged versions of library and map will be used.
+Only if you don’t need to edit the default configuration or source code at all.
 
 In terminal:
 
